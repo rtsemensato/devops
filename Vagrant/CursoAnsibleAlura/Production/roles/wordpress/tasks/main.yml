@@ -1,0 +1,39 @@
+---
+- name: 'Download latest wordpress'
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp/wordpress.tar.gz
+
+- name: 'Decompress the wordpress file'
+  unarchive:
+    src: /tmp/wordpress.tar.gz
+    dest: /var/www/
+    remote_src: yes
+  become: yes
+
+- name: 'Make a copy of wordpress sample config page'
+  copy:
+    src: "{{ wp_install_dir }}/wp-config-sample.php"
+    dest: "{{ wp_install_dir }}/wp-config.php"
+    remote_src: yes
+  become: yes
+
+- name: 'Put the database connection values on wordpress config file'
+  replace:
+    path: "{{ wp_install_dir }}/wp-config.php"
+    regexp: "{{ item.regex }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { regex: 'database_name_here', value: "{{ wp_db_name }}"}
+    - { regex: 'username_here', value: "{{ wp_db_user }}"}
+    - { regex: 'password_here', value: "{{ wp_db_pass }}"}
+    - { regex: 'localhost', value: "{{ wp_db_ip }}"}
+  become: yes
+
+- name: 'Config Apache to serve wordpress'
+  template:
+    src: 'templates/000-default.conf.j2'
+    dest: '/etc/apache2/sites-available/000-default.conf'
+  become: yes
+  notify:
+    - 'Restart Apache'

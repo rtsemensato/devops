@@ -1,0 +1,11 @@
+#Hello World
+ansible wordpress -vvvv -u vagrant --private-key .vagrant/machines/wordpress/virtualbox/private_key -i hosts -m shell -a 'echo Hello, World!'
+
+#Playbooks
+ansible-playbook provisioning.yml -u vagrant -i hosts --private-key .vagrant/machines/wordpress/virtualbox/private_key
+
+# User and ssh key configured inside hosts file
+ansible-playbook provisioning.yml -i hosts
+
+# Passing variables in command line
+ansible-playbook -i hosts --extra-vars 'wp_db_name=wordpress_db' provisioning.yml
