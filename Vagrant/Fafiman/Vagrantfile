@@ -2,6 +2,18 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "ubuntu/xenial64"
 
-  config.vm.provision :shell, path: "upgrade_ubuntu.sh"
+  config.vm.provider "virtualbox" do |v|
+	  v.memory = 1024
+  end
+  
+  config.vm.define "webserver" do |s1|
+    s1.vm.network "private_network", ip: "172.17.177.40"
+    s1.vm.provision "shell", path: "upgrade_ubuntu.sh"
+  end
+
+  config.vm.define "database" do |s2|
+    s2.vm.network "private_network", ip: "172.17.177.41"
+    s2.vm.provision "shell", path: "upgrade_ubuntu.sh"
+  end
 
 end
