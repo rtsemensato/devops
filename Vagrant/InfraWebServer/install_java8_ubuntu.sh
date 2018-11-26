@@ -1,2 +1,2 @@
-apt update
-apt install default-jre -y
+apt-get update
+apt-get install default-jre -y

@@ -1,2 +1,2 @@
-apt update
-apt install postgresql -y
+apt-get update
+apt-get install postgresql -y
