@@ -1,1 +1,0 @@
-O diretório /vagrant da VM é linkado com o diretório onde está o vangrantfile
